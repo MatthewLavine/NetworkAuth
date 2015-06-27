@@ -15,6 +15,9 @@ auth_target = sys.argv[1]
 username = sys.argv[2]
 password = sys.argv[3]
 
+if "http" not in auth_target:
+    auth_target = "http://" + auth_target
+
 print ("Checking connection to: " + auth_target)
 
 try:
