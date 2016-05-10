@@ -1,25 +1,27 @@
 #!/usr/bin/python
 # Authenticates against a LAN using HTTP Basic Auth
 
-import sys, logging, requests, requests.exceptions
+import sys, argparse, logging, requests, requests.exceptions
 
 def main(argv):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-l', '--logFile')
+    parser.add_argument('url')
+    parser.add_argument('username')
+    parser.add_argument('password')
+    args = parser.parse_args()
+
+    auth_target = args.url
+    username = args.username
+    password = args.password
+    logFile = args.logFile
+
     requests.packages.urllib3.disable_warnings()
     logging.getLogger("requests").setLevel(logging.WARNING)
     logging.getLogger('urllib3').setLevel(logging.WARNING)
 
-    logging.basicConfig(filename='network_auth.log',level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-
-    log('--------------------------------------------------')
-
-    if len(sys.argv) != 4:
-        log('Invalid arguments', logLevel='WARNING', printToScreen=True)
-        log('Proper syntax is: ' + sys.argv[0] + ' [url] [username] [password]', logLevel='WARNING', printToScreen=True)
-        sys.exit(1)
-
-    auth_target = sys.argv[1]
-    username = sys.argv[2]
-    password = sys.argv[3]
+    if logFile:
+        logging.basicConfig(filename=logFile, level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
     if "http" not in auth_target:
         log('URI not fully defined, adding "http://"')
