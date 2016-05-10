@@ -21,7 +21,7 @@ if "http" not in auth_target:
 print ("Checking connection to: " + auth_target)
 
 try:
-    auth_check = requests.get(auth_target)
+    auth_check = requests.get(auth_target, verify=False)
 except requests.exceptions.ConnectionError as e:
     print (e)
     sys.exit(2)
@@ -42,7 +42,7 @@ if check_status == 200:
 print ("Authenticating...")
 
 try:
-    do_auth = requests.get(auth_target, auth=(username, password))
+    do_auth = requests.get(auth_target, auth=(username, password), verify=False)
 except requests.exceptions.ConnectionError as e:
     print (e)
     sys.exit(4)
@@ -58,4 +58,3 @@ if auth_status == 200:
     print ("Authentication successful")
 else:
     print ("Authentication failed with response code: " + str(auth_status))
-
